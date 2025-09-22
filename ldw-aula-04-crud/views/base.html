@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=heaz, initial-scale=1.0">
+    <title>The Games</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body>
+    <header>
+        <li>
+            <a href="{{url_for('game')}}">Home</a>
+        </li>
+        <li>
+            <a href="{{url_for('newgame')}}">New Game</a>
+        </li>
+        <li>
+            <a href="{{url_for('apigames')}}">ApiGames</a>
+        </li>
+    </header>
+        {% block content %}
+        <!-- Aqui irá o conteudo das outras páginas -->
+        {% endblock %}
+        <footer>
+        <p style="text-align: center;">Todos os direitos reservados &reg</p>
+    </footer>
+</body>
+</html>

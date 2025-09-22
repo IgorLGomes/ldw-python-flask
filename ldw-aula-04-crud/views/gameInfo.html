@@ -1,0 +1,11 @@
+{% extends 'base.html' %} {% block content %}
+<h1 class="mx-auto">apigames</h1>
+<div class="w-[100%] h-fit flex flex-row flex-wrap justify-between">
+  {% for game in gameInfo%}
+  <div class="rounded-lg border-1 border-black mt-1">
+    <img src="{{game.thumbnail}}" />
+    <span class="text-white"> {{game.title}} </span>
+  </div>
+  {% endfor %}
+</div>
+{% endblock content %}

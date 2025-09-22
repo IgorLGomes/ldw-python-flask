@@ -1,0 +1,13 @@
+{% extends 'base.html' %} {% block content %}
+<h1 class="mx-auto">apigames</h1>
+<div class="w-[100%] h-fit flex flex-row flex-wrap justify-between">
+  {% for game in games%}
+  <div class="rounded-lg border-1 border-black mt-1">
+    <img src="{{game.thumbnail}}" />
+    <span class="text-black">{{game.title}}</span>
+    <span class="text-black">{{game.id}}</span>
+    <a href="{{url_for('apigames',id=game.id)}}">Link</a>
+  </div>
+  {% endfor %}
+</div>
+{% endblock content %}

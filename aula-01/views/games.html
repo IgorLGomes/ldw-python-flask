@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Games</h1>
+    {{tittle}}
+    {{year}}
+    {{category}}
+    <p>O jogo {{title}} tem {{2025 - year}} anos</p>
+    
+    <p>{{players}}</p>
+    {% for player in players %}
+        <li>{{player}}</li>
+    {% endfor %}
+    
+    {#Dicionários#}
+    {% for key, value in console.items() %}
+        {{key}} : {{value}}<br>
+    {%endfor%}
+
+    <h2>Game Object:</h2>
+    <p>Game: <b>{{gameObject['titulo']}}</b> e ano <b>{{gameObject['ano']}}</b></p>
+</body>
+</html>

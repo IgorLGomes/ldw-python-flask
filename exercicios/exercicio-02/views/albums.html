@@ -1,0 +1,36 @@
+{% extends 'base.html' %} {% block content %}
+<div class="w-[80%] px-4 mx-auto d-block ">
+    <h2 class="text-xl font-semibold mb-4">Lista de Álbuns</h2>
+
+  <form method="POST" class="mb-6 flex gap-2 flex-wrap">
+    <input
+      name="title"
+      placeholder="Título do álbum"
+      required
+      class="px-3 py-2 rounded bg-zinc-800 text-white"
+    />
+    <input
+      name="filename"
+      placeholder="Arquivo: (ex: yeezus.jpeg)"
+      required
+      class="px-3 py-2 rounded bg-zinc-800 text-white"
+    />
+    <button type="submit" class="px-4 py-2 rounded bg-green-500 text-black">
+      Adicionar
+    </button>
+  </form>
+
+  <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+    {% for album in albums %}
+    <div class="">
+      <img
+        src="{{ url_for('static', filename='imgs/' ~ album.filename) }}"
+        alt="{{ album.title }}"
+        class="rounded-xl w-full h-fit object-cover"
+      />
+      <p class="pt-3">{{ album.title }}</p>
+    </div>
+    {% endfor %}
+  </div>
+  {% endblock %}
+</div>

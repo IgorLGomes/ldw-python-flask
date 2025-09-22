@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>{{Title}}</h1>
+{# Duas chaves são usadas para variáveis e expressoes com duas variáveis#}
+{# {%%}Chave+porcentagem são usadas para expressões e código#}
+
+<h3>Está sendo jogado por:</h3>
+<ol>
+  {% for player in players %}
+  <li>{{player}}</li>
+  {%endfor%}
+</ol>
+
+{# é P NOME DA FUNÇÃO "{{url_for('games')}}" #}
+<form action="{{url_for('games')}}" method="post">
+  <label for="playerInput">Jogador:</label>
+  <input type="text" name="playerInput" />
+  <input type="submit" value="Entrar" />
+</form>
+<hr />
+{% endblock content %}

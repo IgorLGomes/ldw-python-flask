@@ -1,0 +1,16 @@
+{% extends 'base.html' %} {% block content %}
+<div class="w-[80%] px-4 mx-auto d-block text-center pt-15">
+  {% if not logged %}
+  <p class="pb-10">Conecte sua conta Spotify para ver seus mais ouvidos.</p>
+  <a
+    href="{{ url_for('spotify_login') }}"
+    class="px-4 py-2 rounded bg-green-500 text-black"
+    >Login com Spotify</a
+  >
+  {% else %}
+  <p>Você já está conectado.</p>
+  <a href="{{ url_for('spotify_top') }}" class="!text-sky-400/100">Ver meus top items</a> |
+  <a href="{{ url_for('spotify_logout') }}" class="!text-red-500/100">Desconectar</a>
+
+  {% endif %} {% endblock %}
+</div>

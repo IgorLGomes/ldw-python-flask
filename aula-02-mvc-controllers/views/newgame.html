@@ -1,0 +1,32 @@
+{% extends 'base.html'%} {% block content%}
+<h1>Cadastro de Jogo:</h1>
+<hr />
+
+<form action="{{url_for('store')}}" method="post">
+  <label for="titleInput">Título</label>
+  <input type="text" , name="titleInput" />
+  <label for="yearInput">Ano:</label>
+  <input type="text" , name="yearInput" />
+  <label for="categoryInput">Categoria:</label>
+  <input type="text" , name="categoryInput" />
+  <input type="submit" value="Cadastrar" />
+</form>
+
+<hr />
+<table class="table-fixed">
+  <tr>
+    <th>Title</th>
+    <th>Year</th>
+    <th>Category</th>
+  </tr>
+  <tbody>
+    {% for game in gameList %}
+    <tr>
+      <td>{{game.title}}</td>
+      <td>{{game.year}}</td>
+      <td>{{game.category}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock content %}
