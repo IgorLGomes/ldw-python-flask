@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% for category, message in messages %}
+    <div class="alert alert-{{category}}">
+        {{message}}
+    </div>
+{% endfor%}
+{% endwith  %}
+<h1>Bem-vindo ao The Games!</h1>
+<hr>
+<!-- Importando a imagem -->
+<img src="{{url_for('static', filename='imgs/thumb.jpg')}}" alt="The Games" width="800px">
+
+{% endblock content %}

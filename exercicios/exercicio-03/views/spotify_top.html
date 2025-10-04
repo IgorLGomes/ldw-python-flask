@@ -1,0 +1,40 @@
+{% extends 'base.html' %} {% block content %}
+<div class="w-[80%] px-4 mx-auto d-block pt-10">
+  <h2 class="text-xl font-bold pb-5">Seus Top Artists</h2>
+  <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
+    {% for artist in artists %}
+    <div class="text-center">
+      {% if artist.images and artist.images[0] %}
+      <img
+        src="{{ artist.images[0].url }}"
+        alt="{{ artist.name }}"
+        class="rounded-xl w-full aspect-square object-cover"
+      />
+      {% endif %}
+      <p class="pt-2">{{ artist.name }}</p>
+    </div>
+    {% endfor %}
+  </div>
+
+  <h2 class="text-xl font-bold py-5">Suas Top Tracks</h2>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    {% for track in tracks %}
+    <div class="flex items-center gap-3">
+      {% if track.album.images and track.album.images[0] %}
+      <img
+        src="{{ track.album.images[0].url }}"
+        alt="{{ track.name }}"
+        style="width: 64px; height: 64px; object-fit: cover; border-radius: 8px"
+      />
+      {% endif %}
+      <div>
+        <div>{{ track.name }}</div>
+        <div class="text-sm text-gray-400">
+          {{ track.artists | map(attribute='name') | join(', ') }}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endblock %}
+</div>
