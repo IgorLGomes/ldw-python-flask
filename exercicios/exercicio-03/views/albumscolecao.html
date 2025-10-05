@@ -1,0 +1,90 @@
+{% extends 'base.html' %} {% block content %}
+<div class="w-[80%] px-4 mx-auto d-block">
+  <h2 class="text-xl font-semibold mb-4">Sua coleção de Albums</h2>
+  <form
+    action="{{url_for('albumsColecao')}}"
+    class="mb-6 grid grid-cols-1 md:grid-cols-4 gap-2"
+    method="POST"
+  >
+    <input
+      type="text"
+      name="nome"
+      placeholder="Nome"
+      class="form-control px-3 py-2 rounded bg-zinc-800 text-white"
+      required
+    />
+     
+    <select name="artist" class="form-select px-3 py-2 rounded bg-zinc-800 text-white" required>
+      <option value="" selected disabled>Selecione um artista</option>
+      {% for artist in artists %}
+        <option value="{{ artist.nome }}">{{ artist.nome }}</option>
+      {% endfor %}
+    </select>
+
+    <input
+      type="number"
+      name="ano_lancamento"
+      placeholder="Ano de lançamento (yyyy-mm-dd)"
+      class="form-control px-3 py-2 rounded bg-zinc-800 text-white"
+    />
+    <div class="md:col-span-4">
+      <input
+        type="submit"
+        value="Cadastrar"
+        class="px-4 py-2 rounded bg-green-500 text-black"
+      />
+    </div>
+  </form>
+
+  <hr />
+  <h2 class="text-xl font-semibold mt-7">Albums da coleção:</h5>
+  <br />
+  <table class="w-full table-auto border-collapse">
+    <thead class="table-dark">
+      <tr class="text-left">
+        <th class="px-3 py-2">Nome:</th>
+        <th class="px-3 py-2">Artista:</th>
+        <th class="px-3 py-2">Ano de lançamento:</th>
+        <th style="text-align: center" colspan="2">Ação:</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for album in albumscolecao.items %}
+      <tr >
+        <td class="px-3 py-2">{{album.nome}}</td>
+        <td class="px-3 py-2">{{album.artist}}</td>
+        <td class="px-3 py-2">{{album.ano_lancamento}}</td>
+        <td style="text-align: center; width: 130px">
+          <a
+            class="px-4 py-2 rounded bg-yellow-500 text-black"
+            href="{{url_for('albumEdit', id=album.id)}}"
+            >Editar</a
+          >
+        </td>
+        <td style="text-align: center; width: 130px">
+          <a
+            class="px-4 py-2 rounded bg-red-500 text-black"
+            href="{{url_for('albumsColecao', id=album.id)}}"
+            onclick="return confirm('Deseja mesmo excluir o album {{album.nome}}?')"
+            >Excluir</a
+          >
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <p style="text-align: center">
+    <!-- Se houver registros anteriores -->
+    {% if albumscolecao.has_prev %}
+    <a href="{{url_for('albumsColecao', page=albumscolecao.prev_num)}}">
+      << Anterior</a
+    >
+    {% endif %}
+    <!-- Se houver próximos registros -->
+    {% if albumscolecao.has_next %}
+    <a href="{{url_for('albumsColecao', page=albumscolecao.next_num)}}"
+      >Próximo >></a
+    >
+  </p>
+  {% endif %} {% endblock content %}
+</div>

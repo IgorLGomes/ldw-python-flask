@@ -1,0 +1,49 @@
+{% extends 'base.html' %} {% block content %}
+<div class="w-[80%] px-4 mx-auto d-block">
+  <h2 class="text-xl font-semibold mb-4">Dados do Artista</h2>
+  <form
+    action="{{url_for('albumEdit', id=album.id)}}"
+    class="mb-6 grid grid-cols-1 md:grid-cols-4 gap-2"
+    method="POST"
+  >
+    <input
+      type="text"
+      name="nome"
+      class="form-control px-3 py-2 rounded bg-zinc-800 text-white"
+      value="{{album.nome}}"
+      required
+    />
+    <select name="artist" class="form-select px-3 py-2 rounded bg-zinc-800 text-white" required>
+      <option value="" selected disabled>Selecione um artista</option>
+      {% for artist in artists %}
+        <option value="{{ artist.nome }}">{{ artist.nome }}</option>
+      {% endfor %}
+    </select>
+
+    <input
+      type="text"
+      name="ano_lancamento"
+      value="{{album.ano_lancamento}}"
+      class="form-control px-3 py-2 rounded bg-zinc-800 text-white"
+      required
+    />
+    <br />
+    <div class="md:col-span-6">
+      <a
+        href="{{url_for('albumEdit', id=album.id)}}"
+        onclick="return confirm('Confirma as alterações?')"
+      >
+        <input
+          type="submit"
+          value="Alterar"
+          class="px-4 py-2 rounded bg-green-500 text-black"
+        />
+      </a>
+
+      <a href="{{url_for('albumsColecao')}}">
+        <input type="button" value="Cancelar" class="px-4 py-2 rounded bg-red-500 text-black" />
+      </a>
+    </div>
+  </form>
+</div>
+{% endblock content %}

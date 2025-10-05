@@ -3,7 +3,7 @@ import base64
 import secrets
 import requests
 from urllib.parse import urlencode
-
+from models.database import db, Album, Artist
 from flask import render_template, request, redirect, url_for, jsonify, session, abort
 
 
@@ -26,15 +26,6 @@ albums_list = [
     {"title": "Time 'n' Place", "filename": "tnp.jpg"},
     {"title": "Cartola (1976)", "filename": "cartola.jpg"},
 ]
-
-# dicionário que será exibido em tabela e pode ser atualizado
-artist_dict = {
-    "name": "Kanye West",
-    "album": "Yeezus",
-    "year": 2013,
-    "genre": "Hip-Hop"
-}
-
 
 # Spotify config via env
 SPOTIFY_CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID")
@@ -85,24 +76,6 @@ def init_app(app):
                 albums_list.append({"title": title, "filename": filename})
             return redirect(url_for('albums'))
         return render_template('albums.html', albums=albums_list)
-
-    @app.route('/artist', methods=['GET', 'POST'])
-    def artist():
-        global artist_dict
-        if request.method == 'POST':
-            name = request.form.get('name', '').strip()
-            album = request.form.get('album', '').strip()
-            year = request.form.get('year', '').strip()
-            genre = request.form.get('genre', '').strip()
-            if name and album and year and genre:
-                try:
-                    year_val = int(year)
-                except ValueError:
-                    year_val = year
-                artist_dict = {"name": name, "album": album,
-                               "year": year_val, "genre": genre}
-            return redirect(url_for('artist'))
-        return render_template('artist.html', artist=artist_dict)
 
     # ---------------- Spotify OAuth ----------------
     @app.route('/spotify')
@@ -202,11 +175,93 @@ def init_app(app):
         session.pop('spotify_refresh_token', None)
         return redirect(url_for('spotify_home'))
 
-    # ---------------- endpoints para teste ----------------
-    @app.route('/api/albums', methods=['GET'])
-    def api_albums():
-        return jsonify(albums_list)
 
-    @app.route('/api/artist', methods=['GET'])
-    def api_artist():
-        return jsonify(artist_dict)
+
+
+    @app.route('/artist', methods=['GET', 'POST'])
+    @app.route('/artist/delete/<int:id>')
+    def artist(id=None):
+        if id:
+            artist = Artist.query.get(id)
+            # Deleta o console cadastro pela ID
+            db.session.delete(artist)
+            db.session.commit()
+            return redirect(url_for('artist'))
+        if request.method == 'POST':
+            newartist = Artist(
+                request.form['nome'], request.form['genero'])
+            db.session.add(newartist)
+            db.session.commit()
+            return redirect(url_for('artist'))
+        else:
+            # Captura o valor de 'page' que foi passado pelo método GET
+            # Define como padrão o valor 1 e o tipo inteiro
+            page = request.args.get('page', 1, type=int)
+            # Valor padrão de registros por página (definimos 3)
+            per_page = 3
+            # Faz um SELECT no banco a partir da pagina informada (page)
+            # Filtrando os registro de 3 em 3 (per_page)
+            artist = Artist.query.paginate(
+                page=page, per_page=per_page)
+            return render_template('artist.html', artist=artist)
+
+    # CRUD artist - EDIÇÃO
+    @app.route('/artist/edit/<int:id>', methods=['GET', 'POST'])
+    def artistEdit(id):
+        artist = Artist.query.get(id)
+        # Edita o console com as informações do formulário
+        if request.method == 'POST':
+            artist.nome = request.form['nome']
+            artist.genero = request.form['genero']
+            db.session.commit()
+            return redirect(url_for('artist'))
+        return render_template('artistedit.html', artist=artist)
+    
+    
+    
+    
+    
+    
+    # CRUD albums - LISTAGEM, CADASTRO E EXCLUSÃO
+    @app.route('/albums/colecao', methods=['GET', 'POST'])
+    @app.route('/albums/colecao/delete/<int:id>')
+    def albumsColecao(id=None):
+        if id:
+            album = Album.query.get(id)
+            # Deleta o console cadastro pela ID
+            db.session.delete(album)
+            db.session.commit()
+            return redirect(url_for('albumsColecao'))
+        # Cadastra um novo console
+        if request.method == 'POST':
+            newalbum = Album(
+                request.form['nome'], request.form['artist'], request.form['ano_lancamento'])
+            db.session.add(newalbum)
+            db.session.commit()
+            return redirect(url_for('albumsColecao'))
+        else:
+            # Captura o valor de 'page' que foi passado pelo método GET
+            # Define como padrão o valor 1 e o tipo inteiro
+            page = request.args.get('page', 1, type=int)
+            # Valor padrão de registros por página (definimos 3)
+            per_page = 3
+            # Faz um SELECT no banco a partir da pagina informada (page)
+            # Filtrando os registro de 3 em 3 (per_page)
+            albums_page = Album.query.paginate(
+                page=page, per_page=per_page)
+            artists = Artist.query.all()
+            return render_template('albumscolecao.html', albumscolecao=albums_page, artists=artists)
+        
+    # CRUD albums - EDIÇÃO
+    @app.route('/albums/edit/<int:id>', methods=['GET', 'POST'])
+    def albumEdit(id):
+        album = Album.query.get(id)
+        # Edita o console com as informações do formulário
+        if request.method == 'POST':
+            album.nome = request.form['nome']
+            album.artist = request.form['artist']
+            album.ano_lancamento = request.form['ano_lancamento']
+            db.session.commit()
+            return redirect(url_for('albumsColecao'))
+        artists = Artist.query.all()
+        return render_template('albumedit.html', album=album, artists=artists)

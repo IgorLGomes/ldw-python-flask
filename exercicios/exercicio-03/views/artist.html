@@ -4,33 +4,20 @@
 
   <form method="POST" class="mb-6 grid grid-cols-1 md:grid-cols-4 gap-2">
     <input
-      name="name"
+      name="nome"
       placeholder="Nome"
       required
       class="px-3 py-2 rounded bg-zinc-800 text-white"
     />
     <input
-      name="album"
-      placeholder="Álbum"
-      required
-      class="px-3 py-2 rounded bg-zinc-800 text-white"
-    />
-    <input
-      name="year"
-      type="number"
-      placeholder="Ano"
-      required
-      class="px-3 py-2 rounded bg-zinc-800 text-white"
-    />
-    <input
-      name="genre"
+      name="genero"
       placeholder="Gênero"
       required
       class="px-3 py-2 rounded bg-zinc-800 text-white"
     />
     <div class="md:col-span-4">
       <button type="submit" class="px-4 py-2 rounded bg-green-500 text-black">
-        Atualizar
+        Cadastrar
       </button>
     </div>
   </form>
@@ -39,26 +26,34 @@
     <thead>
       <tr class="text-left">
         <th class="px-3 py-2">Campo</th>
-        <th class="px-3 py-2">Valor</th>
+        <th class="px-3 py-2">Gênero</th>
+        <th class="px-3 py-2" style="text-align: center" colspan="2">Ações</th>
       </tr>
     </thead>
     <tbody>
+      {% for artist in artist.items %}
+
       <tr>
-        <td class="px-3 py-2">Nome</td>
-        <td class="px-3 py-2">{{ artist.name }}</td>
+        <td class="px-3 py-2">{{artist.nome}}</td>
+        <td class="px-3 py-2">{{artist.genero}}</td>
+
+        <td style="text-align: center; width: 130px">
+          <a
+            class="px-4 py-2 rounded bg-yellow-500 text-black"
+            href="{{url_for('artistEdit', id=artist.id)}}"
+            >Editar</a
+          >
+        </td>
+        <td style="text-align: center; width: 130px">
+          <a
+            class="px-4 py-2 rounded bg-red-500 text-black"
+            href="{{url_for('artist', id=artist.id)}}"
+            onclick="return confirm('Deseja mesmo excluir o artista {{artist.nome}}?')"
+            >Excluir</a
+          >
+        </td>
       </tr>
-      <tr>
-        <td class="px-3 py-2">Álbum</td>
-        <td class="px-3 py-2">{{ artist.album }}</td>
-      </tr>
-      <tr>
-        <td class="px-3 py-2">Ano</td>
-        <td class="px-3 py-2">{{ artist.year }}</td>
-      </tr>
-      <tr>
-        <td class="px-3 py-2">Gênero</td>
-        <td class="px-3 py-2">{{ artist.genre }}</td>
-      </tr>
+      {% endfor %}
     </tbody>
   </table>
   {% endblock %}

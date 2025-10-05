@@ -1,0 +1,42 @@
+{% extends 'base.html' %} {% block content %}
+<div class="w-[80%] px-4 mx-auto d-block">
+  <h2 class="text-xl font-semibold mb-4">Dados do Artista</h2>
+  <form
+    action="{{url_for('artistEdit', id=artist.id)}}"
+    class="mb-6 grid grid-cols-1 md:grid-cols-4 gap-2"
+    method="POST"
+  >
+    <input
+      type="text"
+      name="nome"
+      class="form-control px-3 py-2 rounded bg-zinc-800 text-white"
+      value="{{artist.nome}}"
+      required
+    />
+    <input
+      type="text"
+      name="genero"
+      value="{{artist.genero}}"
+      class="form-control px-3 py-2 rounded bg-zinc-800 text-white"
+      required
+    />
+    <br />
+    <div class="md:col-span-6">
+      <a
+        href="{{url_for('artistEdit', id=artist.id)}}"
+        onclick="return confirm('Confirma as alterações?')"
+      >
+        <input
+          type="submit"
+          value="Alterar"
+          class="px-4 py-2 rounded bg-green-500 text-black"
+        />
+      </a>
+
+      <a href="{{url_for('artist')}}">
+        <input type="button" value="Cancelar" class="px-4 py-2 rounded bg-red-500 text-black" />
+      </a>
+    </div>
+  </form>
+</div>
+{% endblock content %}
